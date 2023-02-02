@@ -1,0 +1,71 @@
+{
+    "config": {
+        "target": "http://stg-all.invfw-hulk-gateway-cr-mla.melifrontends.com/worker/v1/movements",
+        "phases": [
+            {
+                "name": "333rps x 7 mins",
+                "duration": 420,
+                "arrivalRate": 333
+            },
+            {
+                "name": "100rps x 7 mins",
+                "duration": 420,
+                "arrivalRate": 1000
+            },
+            {
+                "name": "2000rps x 7 mins",
+                "duration": 420,
+                "arrivalRate": 2000
+            },
+            {
+                "name": "3500rps x 7 mins",
+                "duration": 420,
+                "arrivalRate": 3500
+            },
+            {
+                "name": "5000rps x 7 mins",
+                "duration": 420,
+                "arrivalRate": 5000
+            },
+            {
+                "name": "7500rps x 7 mins",
+                "duration": 420,
+                "arrivalRate": 7500
+            },
+            {
+                "name": "8333rps x 7 mins",
+                "duration": 2400,
+                "arrivalRate": 8333
+            }
+        ],
+        "payload": {
+            "path": "data.csv",
+            "fields": ["id"]
+        }
+    },
+    "scenarios": [
+        {
+            "name": "revalue user",
+            "flow": [
+                {
+                    "post": {
+                        "url": "/gains",
+                        "json": {
+                            "msg": {
+                                "amount": 0.06,
+                                "composite": {
+                                    "name": "gain",
+                                    "part": "gain"
+                                },
+                                "idempotency_token": "2-{{ id }}-20230203-1",
+                                "operation_date": "2023-02-03",
+                                "operation_type": "gain",
+                                "user_id": "{{ id }}"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

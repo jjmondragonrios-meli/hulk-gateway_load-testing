@@ -1,0 +1,31 @@
+config:
+  target: "https://http://stg-all.invfw-hulk-gateway-cr-mla.melifrontends.com/worker/v1/movements"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+      name: Warm up
+    - duration: 20
+      arrivalRate: 2
+      name: Ramp up load
+  processor: "./conversion.js"
+  payload:
+    path: "data.csv"
+    fields:
+      - "id"
+
+scenarios:
+  - name: "apply user gain"
+    flow:
+      - post:
+          url: "/gains"
+          beforeRequest: "convertIDToInt"
+          json:
+            msg:
+              amount: 0.06
+              composite:
+                name: "gain"
+                part: "gain"
+              idempotency_token: "2-{{ id }}-20230203-1"
+              operation_date: "2023-02-03"
+              operation_type: "gain"
+              user_id: "{{ id }}"
